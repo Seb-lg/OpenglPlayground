@@ -17,15 +17,16 @@ public:
 	Object() = default;
 
 	void Init();
+	void Draw();
 
 private:
 	void LoadVertex();
-	static void CheckErrorShader(GLuint shader);
 	void InitShaders();
 
 
 public:
 	std::string vertex_file;
+	std::string texture_file;
 
 	GLint	program;
 	GLuint	vao;

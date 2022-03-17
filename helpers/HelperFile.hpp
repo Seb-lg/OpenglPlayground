@@ -30,6 +30,7 @@ namespace HelperFile {
 		}
 
 		std::string line;
+		int vert_info = -1;
 		while (getline(in, line))
 		{
 			if (line.substr(0,2) == "v ")
@@ -44,12 +45,25 @@ namespace HelperFile {
 			else if (line.substr(0,2) == "f ")
 			{
 				line = line.substr(2);
+				if (vert_info == -1)
+					vert_info = std::count(line.begin(), line.end(), '/') / 3 + 1;
 				std::replace(line.begin(), line.end(), '/', ' ');
 				std::istringstream s(line);
-				int a,b,c,d,e,f,g,h,i;
+				int a,b,c,d,e,f,g,h,i = -1;
 				s >> a;s >> b;s >> c;s >> d;s >> e;s >> f;s >> g;s >> h;s >> i;
 				--a;--b;--c;--d;--e;--f;--g;--h;--i;
-				indices.push_back(a);indices.push_back(b);indices.push_back(c);indices.push_back(d);indices.push_back(e);indices.push_back(f);indices.push_back(g);indices.push_back(h);indices.push_back(i);
+				indices.push_back(a);
+				indices.push_back(b);
+				indices.push_back(c);
+				indices.push_back(d);
+				indices.push_back(e);
+				indices.push_back(f);
+				if (vert_info == 3){
+					indices.push_back(g);
+					indices.push_back(h);
+					indices.push_back(i);
+				}
+
 			}
 			else if (line.substr(0,3) == "vt ")
 			{
@@ -57,7 +71,7 @@ namespace HelperFile {
 				float x, y;
 				s >> x; s >> y;
 				texture_pos.push_back(x);
-				texture_pos.push_back(y);
+				texture_pos.push_back(-y);
 			}
 			/* anything else is ignored */
 		}
@@ -75,18 +89,20 @@ namespace HelperFile {
 //		}
 
 		std::vector<float> obj;
-		for (int i = 0; i < indices.size(); i+=3) {
+		for (int i = 0; i < indices.size(); i+=vert_info) {
 			// position
 			obj.push_back(vertices[indices[i + 0]*3 + 0]);
 			obj.push_back(vertices[indices[i + 0]*3 + 1]);
 			obj.push_back(vertices[indices[i + 0]*3 + 2]);
 
 			// texture
-			obj.push_back(texture_pos[indices[i + 1]*3 + 0]);
-			obj.push_back(texture_pos[indices[i + 1]*3 + 1]);
+			obj.push_back(texture_pos[indices[i + 1]*2 + 0]);
+			obj.push_back(texture_pos[indices[i + 1]*2 + 1]);
 
 			// normal -> unset
 		}
+
+		std::cout << obj.size() / 5  << std::endl;
 
 		return obj;
 	}
