@@ -102,8 +102,6 @@ namespace HelperFile {
 			// normal -> unset
 		}
 
-		std::cout << obj.size() / 5  << std::endl;
-
 		return obj;
 	}
 }

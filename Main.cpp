@@ -37,7 +37,7 @@ int main(){
     };
 
     std::cout << "\nEnd of initialisation..." << std::endl;
-	float tamer_jb = 0;
+	float cam_rot = 0;
     while(window.update()){
 		glUseProgram(obj.program);
 		glm::mat4 projection = glm::perspective(glm::radians<float>(window.fov), (float)window.width / (float)window.height, 0.1f, 100.0f);
@@ -48,13 +48,13 @@ int main(){
 		glm::mat4 view = glm::lookAt(window.cameraPos, {0,0,0}, window.cameraUp);
 		glUniformMatrix4fv(glGetUniformLocation(obj.program,"view"), 1, false, glm::value_ptr(view));
 
-		float dist = 3.;
-		window.cameraPos.x = cos(tamer_jb)*dist;
-		window.cameraPos.z = sin(tamer_jb)*dist;
-		window.cameraPos.y = cos(tamer_jb)*dist;
-		tamer_jb+=.01;
+		float dist = 10.;
+		window.cameraPos.x = cos(cam_rot)*dist;
+		window.cameraPos.z = sin(cam_rot)*dist;
+		window.cameraPos.y = cos(cam_rot)*dist;
+		cam_rot+=.01;
 
-		for ( int i = 0 ; i < 1; ++i) {
+		for ( int i = 0 ; i < 10; ++i) {
 
 			glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 			model = glm::translate(model, cubePositions[i]);

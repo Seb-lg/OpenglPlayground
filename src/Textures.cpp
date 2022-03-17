@@ -17,7 +17,6 @@ unsigned int Textures::operator[](std::string name) {
         unsigned char *data = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
         if (data)
         {
-            std::cout << nrChannels << " " << width << " " << height << std::endl;
             glGenTextures(1, &id);
             glBindTexture(GL_TEXTURE_2D, id);
             // set the texture wrapping parameters
