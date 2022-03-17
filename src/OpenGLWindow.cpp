@@ -23,12 +23,23 @@ OpenGLWindow::OpenGLWindow(float fov, int width, int height):fov(fov), width(wid
 
     glewExperimental = GL_TRUE;
     glewInit();
+    glEnable(GL_DEPTH_TEST);
 
-    program = glCreateProgram();
+//    program = glCreateProgram();
 
+
+//    this->InitShaders();
+
+    //  Init camera position and orientation
+    this->cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
+    this->cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    this->cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
+}
+
+void OpenGLWindow::InitShaders() {
     //  Compile camera's vertex shader
     unsigned int sVertex = glCreateShader(GL_VERTEX_SHADER);
-    std::ifstream t("./shaders/camera.shader");
+    std::ifstream t("./shaders/camera_v.shader");
     auto tmp = std::string((std::istreambuf_iterator<char>(t)),std::istreambuf_iterator<char>());
     const char *file = tmp.c_str();
     glShaderSource(sVertex, 1, &file, NULL);
@@ -43,8 +54,29 @@ OpenGLWindow::OpenGLWindow(float fov, int width, int height):fov(fov), width(wid
         glGetShaderInfoLog(sVertex, 1024, NULL, infoLog);
         std::cout << "Error during the compilation of the camera's vertex shader"
                   << infoLog << std::endl;
+        exit(84);
     }
+
     glAttachShader(program, sVertex);
+    //  Compile obj fragment shader
+    unsigned int sFragment = glCreateShader(GL_FRAGMENT_SHADER);
+    t = std::ifstream("./shaders/camera_f.shader");
+    tmp = std::string((std::istreambuf_iterator<char>(t)),std::istreambuf_iterator<char>());
+    file = tmp.c_str();
+    glShaderSource(sFragment, 1, &file, NULL);
+    glCompileShader(sFragment);
+
+    //  Check compilation
+    glGetShaderiv(sFragment, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[1024];
+        glGetShaderInfoLog(sFragment, 1024, NULL, infoLog);
+        std::cout << "Error during the compilation of the object's fragment shader"
+                  << infoLog << std::endl;
+        exit(84);
+    }
+    glAttachShader(program, sFragment);
 
     // Compile program linked shaders
     glLinkProgram(program);
@@ -55,6 +87,7 @@ OpenGLWindow::OpenGLWindow(float fov, int width, int height):fov(fov), width(wid
         glGetProgramInfoLog(program, 1024, NULL, infoLog);
         std::cout << "Error during the compilation of the program shaders" << std::endl
                   << infoLog << std::endl;
+        exit(84);
     }
     glDeleteShader(sVertex);
 }
@@ -62,6 +95,9 @@ OpenGLWindow::OpenGLWindow(float fov, int width, int height):fov(fov), width(wid
 bool OpenGLWindow::update() {
     glfwSwapBuffers(this->window);
     glfwPollEvents();
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    glUseProgram(program);
     return glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS;
 }
 

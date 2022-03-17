@@ -20,10 +20,9 @@ private:
 public:
     Textures() = default;
 
-    unsigned int operator[](std::string path);
+    void BindTextureToShader(unsigned int program, unsigned int shader, std::string shaderName);
 
-private:
-    Image LoadBMP(std::string path);
+    unsigned int operator[](std::string path);
 
 public:
     std::map<std::string, unsigned int> db;

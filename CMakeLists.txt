@@ -11,7 +11,7 @@ find_package(Threads)
 find_package(OpenGL)
 
 add_executable(Loup3D
-        Main.cpp src/OpenGLWindow.cpp src/OpenGLWindow.hpp src/Textures.cpp src/Textures.hpp helpers/stb_image.hpp)
+        Main.cpp src/OpenGLWindow.cpp src/OpenGLWindow.hpp src/Textures.cpp src/Textures.hpp helpers/stb_image.hpp src/Object.hpp helpers/HelperFile.hpp src/Object.cpp test/Shapes.cpp test/Shapes.hpp)
 
 target_link_libraries(Loup3D ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(Loup3D glfw ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES})
