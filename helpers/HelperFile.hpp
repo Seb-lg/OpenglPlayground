@@ -71,7 +71,7 @@ namespace HelperFile {
 				float x, y;
 				s >> x; s >> y;
 				texture_pos.push_back(x);
-				texture_pos.push_back(-y);
+				texture_pos.push_back(y);
 			}
 			/* anything else is ignored */
 		}
