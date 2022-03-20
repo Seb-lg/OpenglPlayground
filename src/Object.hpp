@@ -17,7 +17,7 @@ public:
 	Object() = default;
 
 	void Init();
-	void Draw();
+	void DrawInstance(glm::mat4 projection, glm::mat4 view);
 
 private:
 	void LoadVertex();
@@ -37,6 +37,8 @@ public:
 	std::vector<glm::vec2>	uvs;
 	std::vector<glm::vec3>	normals;
 	std::vector<float>		obj;
+
+	glm::mat4				model;
 };
 
 #endif //OPENGLPLAYGROUND_OBJECT_HPP

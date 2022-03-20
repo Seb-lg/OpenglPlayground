@@ -31,8 +31,10 @@ namespace HelperFile {
 
 		std::string line;
 		int vert_info = -1;
+		int line_nb = 0;
 		while (getline(in, line))
 		{
+			line_nb++;
 			if (line.substr(0,2) == "v ")
 			{
 				std::istringstream s(line.substr(2));
@@ -45,8 +47,17 @@ namespace HelperFile {
 			else if (line.substr(0,2) == "f ")
 			{
 				line = line.substr(2);
-				if (vert_info == -1)
+				if (vert_info == -1) {
 					vert_info = std::count(line.begin(), line.end(), '/') / 3 + 1;
+				}
+
+				int nb_vertice = std::count(line.begin(), line.end(), ' ') + 1;
+				if (nb_vertice != 3) {
+					std::cout << nb_vertice << std::endl;
+					std::cout << "Not handled !\n" << line_nb << ":\t" << path << std::endl;
+					exit(0);
+				}
+
 				std::replace(line.begin(), line.end(), '/', ' ');
 				std::istringstream s(line);
 				int a,b,c,d,e,f,g,h,i = -1;

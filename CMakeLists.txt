@@ -22,7 +22,7 @@ add_executable(Loup3D
 
         helpers/stb_image.hpp
         helpers/HelperFile.hpp
-)
+        helpers/PerlinNoise.hpp helpers/HelperMiscellaneous.hpp)
 
 target_link_libraries(Loup3D ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(Loup3D glfw ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES})

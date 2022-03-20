@@ -5,6 +5,7 @@
 #include <iterator>
 #include <cstring>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 #include "Object.hpp"
 #include "../helpers/stb_image.hpp"
 #include "../helpers/HelperFile.hpp"
@@ -112,4 +113,15 @@ void Object::InitShaders() {
 
 void Object::LoadVertex() {
 	obj = HelperFile::LoadObj(vertex_file);
+}
+
+void Object::DrawInstance(glm::mat4 projection, glm::mat4 view) {
+	glUseProgram(program);
+	glUniformMatrix4fv(glGetUniformLocation(program,"projection"), 1, false, glm::value_ptr(projection));
+	glUniformMatrix4fv(glGetUniformLocation(program,"view"), 1, false, glm::value_ptr(view));
+	glUniformMatrix4fv(glGetUniformLocation(program,"model"), 1, false, glm::value_ptr(model));
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0,obj.size()/5);
 }
