@@ -13,7 +13,7 @@
 
 
 void Renderable::Init() {
-	LoadVertex();
+//	LoadVertex();
 	program = glCreateProgram();
 
 	glGenVertexArrays(1, &vao);

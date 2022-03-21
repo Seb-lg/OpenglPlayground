@@ -20,10 +20,8 @@ public:
 	void Init();
 	void DrawInstance(glm::mat4 projection, glm::mat4 view);
 
-private:
 	void LoadVertex();
 	void InitShaders();
-
 
 public:
 	std::string vertex_file;

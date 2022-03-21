@@ -32,3 +32,13 @@ YOLO::Image YOLO::GetImage(std::string path) {
 
 	return yolo._imgs[path];
 }
+
+
+void YOLO::SetImage(const std::string& name, YOLO::Image &image) {
+	auto &yolo = YOLO::get();
+	if (!yolo._imgs.contains(name)) {
+		yolo._imgs[name] = image;
+	} else {
+		std::cerr << "Image already exist: " << name << std::endl;
+	}
+}

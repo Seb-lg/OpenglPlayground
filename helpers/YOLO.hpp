@@ -25,7 +25,8 @@ private:
 	static YOLO &get();
 public:
 	static std::vector<float> GetObj(std::string path);
-	static Image GetImage(std::string path);
+	static Image	GetImage(std::string path);
+	static void			SetImage(const std::string& name, Image &image);
 
 private:
 	std::map<std::string, std::vector<float>>	_objs;
