@@ -21,7 +21,7 @@ int main(){
 	HelperFile::LoadObj("./assets/untitled.obj");
     OpenGLWindow window;
 	auto &scene = SceneTree::get();
-	PerlinMap map(10, 1);
+	PerlinMap map(10, 8);
 
 	srand(time(nullptr));
 	std::list<std::shared_ptr<Renderable>> objs;
@@ -45,7 +45,7 @@ int main(){
 
 	auto camera = std::make_shared<Object>();
 	camera->position = window.cameraPos;
-	camera->position.z = 10.;
+	camera->position.z = 100.;
 //	exit(0);
 	auto perso_id = scene.Add({perso});
 	scene.Add({camera}, perso_id);

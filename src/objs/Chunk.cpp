@@ -15,7 +15,6 @@ Chunk::Chunk(glm::vec2 position, int chunk_size) {
 	this->position.x = position.x;
 	this->position.y = position.y;
 	float half_size = ((float)(chunk_size))/2.f;
-//	half_size = chunk_size;
 	this->obj = {
 			half_size, half_size, 0.0f, 1.0f, 1.0f,
 			half_size, -half_size, 0.0f, 1.0f, 0.0f,
@@ -33,10 +32,11 @@ Chunk::Chunk(glm::vec2 position, int chunk_size) {
 	image.nrChannels = 3;
 	image.data = new unsigned char[img_size * img_size * image.nrChannels];
 	float power = (float)chunk_size/(float)img_size;
+	power = power*0.01;
 	auto datap = image.data;
 	for (int y = 0; y < img_size; ++y) {
 		for (int x = 0; x < img_size; ++x) {
-			unsigned char val = 255.f * perlin.octave2D_01((((position.x * img_size) + (float)(x)) * power), (((position.y * img_size) + (float)(y)) * power), 4);
+			unsigned char val = 255.f * perlin.octave2D_01(((((position.x/chunk_size) * img_size) + (float)(x)) * power), ((((position.y/chunk_size) * img_size) + (float)(y)) * power), 4);
 			datap[0] = val;
 			datap[1] = val;
 			datap[2] = val;
