@@ -26,23 +26,25 @@ Chunk::Chunk(glm::vec2 position, int chunk_size) {
 
 	static const siv::PerlinNoise::seed_type seed = 19837u;
 	static const siv::PerlinNoise perlin{seed};
-	int img_size = 512;
+	int img_size = 128;
 	YOLO::Image image;
 	image.height = image.width = img_size;
 	image.nrChannels = 3;
 	image.data = new unsigned char[img_size * img_size * image.nrChannels];
 	float power = (float)chunk_size/(float)img_size;
-	power = power*0.01;
+	power = power*0.001;
 	auto datap = image.data;
 	for (int y = 0; y < img_size; ++y) {
 		for (int x = 0; x < img_size; ++x) {
-			unsigned char val = 255.f * perlin.octave2D_01(((((position.x/chunk_size) * img_size) + (float)(x)) * power), ((((position.y/chunk_size) * img_size) + (float)(y)) * power), 4);
+			unsigned char val = 255.f * perlin.octave2D_01(((((position.x/chunk_size) * img_size) + (float)(x)) * power),
+														   ((((position.y/chunk_size) * img_size) + (float)(y)) * power),
+														   4);
+			val = val > 175 ? 255:0;
 			datap[0] = val;
 			datap[1] = val;
 			datap[2] = val;
 			datap += image.nrChannels;
 		}
-
 	}
 
 	this->texture_file = "./assets/chunks/" + std::to_string(position.x) + '_' + std::to_string(position.y) + ".handmade";

@@ -16,7 +16,7 @@ PerlinMap::PerlinMap(int default_area, int chunk_size) {
 					   std::forward_as_tuple(y),
 					   std::forward_as_tuple(glm::vec2({x * chunk_size, y * chunk_size}), chunk_size));*/
 		map[x].emplace(y, std::make_shared<Chunk>(glm::vec2({(x-(default_area/2)) * chunk_size, (y-(default_area/2)) * chunk_size}), chunk_size));
-		scene.Add({map[x][y]});
+		scene.Add({map[x][y], true});
 		float progress = (float)(nb)/(float)(default_area*default_area);
 		HelperMiscellaneous::PrintProgress(progress);
 		++nb;

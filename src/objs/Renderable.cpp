@@ -37,8 +37,10 @@ void Renderable::Init() {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_CLAMP);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// load image, create texture and generate mipmaps
 	YOLO::Image image = YOLO::GetImage(texture_file);
 
@@ -47,7 +49,7 @@ void Renderable::Init() {
 //	stbi_set_flip_vertically_on_load(true);
 //	unsigned char *data = stbi_load(texture_file.data(), &width, &height, &nrChannels, 0);
 	if (image.data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, image.nrChannels == 4 ? GL_RGBA:GL_RGB, GL_UNSIGNED_BYTE, image.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, image.nrChannels == 4 ? GL_RGBA:GL_RGB, GL_UNSIGNED_BYTE, image.data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	} else {
 		std::cout << "Failed to load texture" << std::endl;

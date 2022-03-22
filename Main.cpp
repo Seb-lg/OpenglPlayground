@@ -15,13 +15,14 @@
 #include "helpers/HelperMiscellaneous.hpp"
 #include "src/SceneTree.hpp"
 #include "src/PerlinMap.hpp"
+#include "helpers/HelperInput.hpp"
 
 int main(){
     std::cout << "Hello OpenGl" << std::endl;
 	HelperFile::LoadObj("./assets/untitled.obj");
     OpenGLWindow window;
 	auto &scene = SceneTree::get();
-	PerlinMap map(10, 8);
+	PerlinMap map(10, 128);
 
 	srand(time(nullptr));
 	std::list<std::shared_ptr<Renderable>> objs;
@@ -38,7 +39,7 @@ int main(){
 		scene.Add({tmp});
 	}
 	auto perso = std::make_shared<Renderable>();
-	perso->vertex_file = "./assets/seb.obj";
+	perso->vertex_file = "./assets/untitled.obj";
 	perso->texture_file = "./assets/tex.png";
 	perso->LoadVertex();
 	perso->Init();
@@ -47,13 +48,15 @@ int main(){
 	camera->position = window.cameraPos;
 	camera->position.z = 100.;
 //	exit(0);
-	auto perso_id = scene.Add({perso});
-	scene.Add({camera}, perso_id);
+	auto perso_id = scene.Add({perso, false});
+	scene.Add({camera, false}, perso_id);
 
     std::cout << "\nEnd of initialisation..." << std::endl;
 	float cam_rot = 0;
+	scene.Update(true);
     while(window.update()){
 		HelperMiscellaneous::PrintFps();
+		HelperInput::WASDMouvement(window, perso);
 		scene.Update();
 		glm::mat4 projection = glm::perspective(glm::radians<float>(window.fov), (float)window.width / (float)window.height, 0.1f, 10000.0f);
 		glm::mat4 view = glm::lookAt(camera->absolute_position, perso->absolute_position, window.cameraUp);

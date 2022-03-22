@@ -25,7 +25,7 @@ YOLO::Image YOLO::GetImage(std::string path) {
 
 	if (!yolo._imgs.contains(path)) {
 		Image image;
-		stbi_set_flip_vertically_on_load(true);
+//		stbi_set_flip_vertically_on_load(true);
 		image.data = stbi_load(path.data(), &image.width, &image.height, &image.nrChannels, 0);
 		yolo._imgs.emplace(path, image);
 	}

@@ -27,7 +27,7 @@ add_executable(OpenglPlayground
         helpers/HelperFile.hpp
         helpers/PerlinNoise.hpp
         helpers/HelperMiscellaneous.hpp
-        src/Object.cpp src/Object.hpp helpers/YOLO.cpp helpers/YOLO.hpp src/PerlinMap.cpp src/PerlinMap.hpp src/objs/Chunk.cpp src/objs/Chunk.hpp)
+        src/Object.cpp src/Object.hpp helpers/YOLO.cpp helpers/YOLO.hpp src/PerlinMap.cpp src/PerlinMap.hpp src/objs/Chunk.cpp src/objs/Chunk.hpp helpers/HelperInput.hpp)
 
 target_link_libraries(OpenglPlayground ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(OpenglPlayground glfw ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES})

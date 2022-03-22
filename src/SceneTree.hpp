@@ -9,16 +9,23 @@
 #include <memory>
 #include "Object.hpp"
 
-static unsigned int __id__ = 0;
+static unsigned int GetUniqueId(){
+	static unsigned int _id = 0;
+	++_id;
+	return  _id -1;
+}
 
 struct TreeElem{
-	TreeElem(std::shared_ptr<Object> elem=nullptr):elem(elem) {
-		id = __id__;
-		++__id__;
+	TreeElem(std::shared_ptr<Object> elem=nullptr, bool _static = false):elem(elem), _static(_static) {
+		id = GetUniqueId();
+		if (id == 102) {
+			std::cout << id << std::endl;
+		}
 	}
 	std::shared_ptr<Object> elem;
 	unsigned int id;
 	std::list<TreeElem> childs;
+	bool _static;
 };
 
 class SceneTree {
@@ -28,13 +35,15 @@ private:
 	};
 
 	void _recursive_add(TreeElem &add_elem, TreeElem &root, unsigned int parent = 0);
-	void _recursive_update(TreeElem &elem);
+	void _recursive_get(TreeElem &elem, unsigned int id, TreeElem **ret);
+	void _recursive_update(TreeElem &elem, bool force);
 
 public:
 	static SceneTree &get();
 
 	unsigned int Add(TreeElem child, unsigned int parent=0);
-	void Update();
+	TreeElem &Get(unsigned int id);
+	void Update(bool force = false);
 public:
 	TreeElem	root;
 };
