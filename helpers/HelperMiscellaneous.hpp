@@ -35,14 +35,18 @@ namespace HelperMiscellaneous {
 		std::cout.flush();
 	}
 
-	static glm::vec4 StringToColor(std::string color) {
+	static glm::vec4 StringToColor(std::string color, bool print = false) {
 		if (color[0] == '#')
 			color.erase(0,1);
 		int r,g,b;
 		std::istringstream(color.substr(0,2)) >> std::hex >> r;
 		std::istringstream(color.substr(2,2)) >> std::hex >> g;
 		std::istringstream(color.substr(4,2)) >> std::hex >> b;
-		return {(float)(r)/255.f, (float)(g)/255.f, (float)(b)/255.f, 1.f};
+
+		glm::vec4 out = {(float)(r)/255.f, (float)(g)/255.f, (float)(b)/255.f, 1.f};
+		if (print)
+			std::cout << out[0] << '\t' << out[1] << '\t' << out[2] << '\t' << out[3] << std::endl;
+		return out;
 	}
 
 }

@@ -24,6 +24,12 @@ namespace HelperInput {
 		if (glfwGetKey(window.window, GLFW_KEY_D) == GLFW_PRESS) {
 			elem->position.x += speed * deltatime;
 		}
+		if (glfwGetKey(window.window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+			elem->position.z += speed * deltatime;
+		}
+		if (glfwGetKey(window.window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+			elem->position.z -= speed * deltatime;
+		}
 	}
 }
 
