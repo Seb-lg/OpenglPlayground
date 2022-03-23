@@ -22,7 +22,7 @@ int main(){
 	HelperFile::LoadObj("./assets/untitled.obj");
     OpenGLWindow window;
 	auto &scene = SceneTree::get();
-	PerlinMap map(15, 128);
+	PerlinMap map(30, 512);
 
 	auto perso = std::make_shared<Renderable>();
 	perso->vertex_file = "./assets/untitled.obj";

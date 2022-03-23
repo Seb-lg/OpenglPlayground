@@ -17,7 +17,7 @@ Chunk::Chunk(glm::vec2 position, int chunk_size, float threshold):threshold(thre
 	static const siv::PerlinNoise::seed_type seed = 19837u;
 	static const siv::PerlinNoise perlin{seed};
 	int img_size = chunk_size;
-	YOLO::Image image;
+
 	image.height = image.width = img_size;
 	image.nrChannels = 4;
 	image.data = new unsigned char[(img_size+1) * (img_size+1) * image.nrChannels];
@@ -50,13 +50,19 @@ Chunk::Chunk(glm::vec2 position, int chunk_size, float threshold):threshold(thre
 		dest += img_size*image.nrChannels;
 		src += (img_size+1)*image.nrChannels;
 	}
+}
+
+void Chunk::Load() {
 	this->texture_file = "./assets/chunks/" + std::to_string(position.x) + '_' + std::to_string(position.y) + ".handmade";
 	YOLO::SetImage(this->texture_file, image);
-
-
 	this->Init();
+
 //	stbi_write_png(this->texture_file.data(), image.width, image.height, image.nrChannels, image.data,
 //				   image.width * image.nrChannels);
+}
+
+void Chunk::Unload() {
+
 }
 
 void Chunk::gen_square(int x, int y, int chunk_size, YOLO::Image &image) {
