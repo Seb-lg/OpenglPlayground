@@ -16,11 +16,12 @@ The goal will be to reach the center of the planet while maintaining the submari
 - [X] Use the scene tree to fix the position of the camera to the submarine
 - [X] Use the perlin noise to generate a map around the submarine
 - [X] Handle keyboard event
-- [ ] Use multi-threading to generate map around player
-  - [ ] Only create obj and texture in constructor
-  - [ ] Move current opengl initialisation to a `void Load()` function
+- [X] Use multi-threading to generate map around player
+  - [X] Only create obj and texture in constructor
+  - [X] Move current opengl initialisation to a `void Load()` function
   - [ ] Implement an `void Unload()` function to write modification to file and free memory
 - [ ] See if having only one vertex array is possible
+- [ ] Optimise number of vertices
 - [ ] Create a shader to simulate the deep sea environment
 - [ ] Create a lidar using ray-casting
 

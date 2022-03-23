@@ -38,7 +38,7 @@ PerlinMap::PerlinMap(int default_area, int chunk_size) {
 			nb_vertices += map[x][y]->obj.size();
 		}
 	}
-	std::cout << "c'est le nombre de vertices: " << nb_vertices << std::endl;
+	std::cout << "Number of vertices: " << nb_vertices/5 << std::endl;
 }
 
 void PerlinMap::Update(glm::mat4 projection, glm::mat4 view) {
