@@ -14,11 +14,12 @@ The goal will be to reach the center of the planet while maintaining the submari
 - [X] Load and display an obj from file 
 - [X] Add scene tree to the game engine
 - [X] Use the scene tree to fix the position of the camera to the submarine
-- [ ] Use the perlin noise to generate a map arround the submarine
-- [ ] Handle keyboard event
+- [X] Use the perlin noise to generate a map around the submarine
+- [X] Handle keyboard event
+- [ ] Use multi-threading to generate map around player
 - [ ] See if having only one vertex array is possible
 - [ ] Create a shader to simulate the deep sea environment
-- [ ] Create a lidar using raycasting
+- [ ] Create a lidar using ray-casting
 
 
 ## Reference
