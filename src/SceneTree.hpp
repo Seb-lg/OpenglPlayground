@@ -18,9 +18,6 @@ static unsigned int GetUniqueId(){
 struct TreeElem{
 	TreeElem(std::shared_ptr<Object> elem=nullptr, bool _static = false):elem(elem), _static(_static) {
 		id = GetUniqueId();
-		if (id == 102) {
-			std::cout << id << std::endl;
-		}
 	}
 	std::shared_ptr<Object> elem;
 	unsigned int id;

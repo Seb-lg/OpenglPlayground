@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include "OpenGLWindow.hpp"
+#include "../helpers/HelperMiscellaneous.hpp"
 
 OpenGLWindow::OpenGLWindow(float fov, int width, int height):fov(fov), width(width), height(height) {
     if (!glfwInit()) {
@@ -31,8 +32,8 @@ bool OpenGLWindow::update() {
     glfwSwapBuffers(this->window);
     glfwPollEvents();
 
-//	HelperMiscellaneous::StringToColor("#0B132B"); TODO use the result to drow background
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	auto color = HelperMiscellaneous::StringToColor("#0B132B");
+    glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //    glUseProgram(program);
     return glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS;

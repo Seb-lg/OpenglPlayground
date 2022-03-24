@@ -13,7 +13,6 @@
 
 
 void Renderable::Init() {
-//	LoadVertex();
 	program = glCreateProgram();
 
 	glGenVertexArrays(1, &vao);
@@ -29,32 +28,22 @@ void Renderable::Init() {
 	// texture coord attribute
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (void*)(3*sizeof(float)));
-	// normals
-//	glEnableVertexAttribArray(2);
-//	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (void*)(5*sizeof(float)));
 
 	//	LOAD TEXTURE
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 	// set the texture wrapping parameters
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_CLAMP);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// load image, create texture and generate mipmaps
 	YOLO::Image image = YOLO::GetImage(texture_file);
 
-//	int width, height, nrChannels;
-//	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-//	stbi_set_flip_vertically_on_load(true);
-//	unsigned char *data = stbi_load(texture_file.data(), &width, &height, &nrChannels, 0);
 	if (image.data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, image.nrChannels == 4 ? GL_RGBA:GL_RGB, GL_UNSIGNED_BYTE, image.data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	} else {
 		std::cout << "Failed to load texture" << std::endl;
 	}
-//	stbi_image_free(image.data);
 
 	InitShaders();
 }

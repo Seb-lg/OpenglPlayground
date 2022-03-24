@@ -12,6 +12,8 @@ class Object {
 public:
 	Object();
 
+	void UpdateModel();
+
 public:
 	glm::mat4	model;
 	glm::vec3	position;

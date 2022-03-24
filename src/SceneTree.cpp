@@ -15,15 +15,25 @@ SceneTree &SceneTree::get() {
 
 
 void SceneTree::_recursive_add(TreeElem &add_elem, TreeElem &root, unsigned int parent) {
-	if (root.id == parent)
+	if (root.id == parent) {
+		add_elem.elem->model =
+				root.elem->model *
+				glm::translate(add_elem.elem->position) *
+				add_elem.elem->rotation *
+				glm::scale(add_elem.elem->scale) *
+				glm::mat4(1.0f);
+		add_elem.elem->absolute_position = add_elem.elem->model[3];
 		root.childs.push_back(add_elem);
+		return;
+	}
 	for (auto &child : root.childs)
 		_recursive_add(add_elem, child, parent);
 }
 
 unsigned int SceneTree::Add(TreeElem child, unsigned int parent) {
-	if (child.id == 0)
+	if (child.id == 0) {
 		this->root = child;
+	}
 	else
 		_recursive_add(child, this->root, parent);
 	return child.id;
@@ -60,5 +70,5 @@ void SceneTree::_recursive_update(TreeElem &elem, bool force) {
 }
 
 void SceneTree::Update(bool force) {
-	_recursive_update(this->root, force);
+	_recursive_update(this->root, false);
 }

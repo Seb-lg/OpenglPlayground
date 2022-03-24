@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <thread>
 #include "Chunk.hpp"
 #include "../../helpers/PerlinNoise.hpp"
 
@@ -10,45 +11,18 @@
 #include "../../helpers/stb_image_writer.hpp"
 
 
-Chunk::Chunk(glm::vec2 position, int chunk_size, float threshold):threshold(threshold) {
+Chunk::Chunk(glm::vec2 position, int chunk_size, float threshold):threshold(threshold),loaded(false) {
+	obj_generation.lock();
 	this->position.x = position.x;
 	this->position.y = position.y;
 
-	static const siv::PerlinNoise::seed_type seed = 19837u;
-	static const siv::PerlinNoise perlin{seed};
-	int img_size = chunk_size;
-
-	image.height = image.width = img_size;
-	image.nrChannels = 4;
-	image.data = new unsigned char[(img_size+1) * (img_size+1) * image.nrChannels];
-	float power = (float)chunk_size/(float)img_size;
-	power = power*0.001;
-	auto datap = image.data;
-	for (int y = 0; y <= img_size; ++y) {
-		for (int x = 0; x <= img_size; ++x) {
-			unsigned char val = 255.f * perlin.octave2D_01(((((position.x/chunk_size) * img_size) + (float)(x)) * power),
-														   ((((position.y/chunk_size) * img_size) + (float)(y)) * power),
-														   8);
-			datap[0] = val;
-			datap[1] = val;
-			datap[2] = val;
-			if (image.nrChannels == 4)
-				datap[3] = val;
-			datap += image.nrChannels;
-		}
-	}
-	for (int y = 0; y <= img_size; ++y) {
-		for (int x = 0; x <= img_size; ++x) {
-			gen_square(x, y, chunk_size+1, image);
-		}
-	}
-	unsigned char *src, *dest;
-	src = image.data;
-	dest = image.data;
-	for (int y = 0; y < img_size; ++y) {
-		memcpy(dest , src , img_size * image.nrChannels);
-		dest += img_size*image.nrChannels;
-		src += (img_size+1)*image.nrChannels;
+	if (false) {// file exist
+	} else {
+//		threaded_gen = std::thread([this,position,chunk_size,threshold](){this->gen_map(position,chunk_size,threshold);});
+		std::thread tmp(&Chunk::gen_map, std::ref(*this),position, chunk_size );
+		tmp.detach();
+		threaded_gen.swap(tmp);
+//		gen_map(position,chunk_size);
 	}
 }
 
@@ -63,6 +37,47 @@ void Chunk::Load() {
 
 void Chunk::Unload() {
 
+}
+
+void Chunk::gen_map(glm::vec2 position, int chunk_size) {
+	static const siv::PerlinNoise::seed_type seed = 19837u;
+	static const siv::PerlinNoise perlin{seed};
+	int img_size = chunk_size;
+
+	loaded = false;
+	image.height = image.width = img_size;
+	image.nrChannels = 4;
+	image.data = new unsigned char[(img_size+1) * (img_size+1) * image.nrChannels];
+	float power = (float)chunk_size/(float)img_size;
+	power = power*0.001;
+	auto datap = image.data;
+	for (int y = 0; y <= img_size; ++y) {
+		for (int x = 0; x <= img_size; ++x) {
+			unsigned char val = 255.f * perlin.octave2D_01(((((position.x/(chunk_size + 1)) * img_size) + (float)(x)) * power),
+														   ((((position.y/(chunk_size + 1)) * img_size) + (float)(y)) * power),
+														   1);
+			datap[0] = val;
+			datap[1] = val;
+			datap[2] = val;
+			if (image.nrChannels == 4)
+				datap[3] = val;
+			datap += image.nrChannels;
+		}
+	}
+	for (int y = 0; y < img_size; ++y) {
+		for (int x = 0; x < img_size; ++x) {
+			gen_square(x, y, chunk_size+1, image);
+		}
+	}
+	unsigned char *src, *dest;
+	src = image.data;
+	dest = image.data;
+	for (int y = 0; y < img_size; ++y) {
+		memcpy(dest , src , img_size * image.nrChannels);
+		dest += img_size*image.nrChannels;
+		src += (img_size+1)*image.nrChannels;
+	}
+	obj_generation.unlock();
 }
 
 void Chunk::gen_square(int x, int y, int chunk_size, YOLO::Image &image) {
@@ -88,4 +103,19 @@ bool Chunk::gen_triangle(glm::vec2 a, glm::vec2 b, glm::vec2 c, int chunk_size, 
 		return true;
 	}
 	return false;
+}
+
+void Chunk::DrawInstance(glm::mat4 projection, glm::mat4 view) {
+	if (loaded)
+		Renderable::DrawInstance(projection, view);
+	else
+		if (obj_generation.try_lock()) {
+			obj_generation.unlock();
+			if (!loaded) {
+				UpdateModel();
+				Load();
+				loaded = true;
+			}
+			Renderable::DrawInstance(projection, view);
+		}
 }

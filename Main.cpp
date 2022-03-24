@@ -22,7 +22,8 @@ int main(){
 	HelperFile::LoadObj("./assets/untitled.obj");
     OpenGLWindow window;
 	auto &scene = SceneTree::get();
-	PerlinMap map(30, 512);
+	PerlinMap map(3, 1024);
+
 
 	auto perso = std::make_shared<Renderable>();
 	perso->vertex_file = "./assets/untitled.obj";
@@ -35,12 +36,14 @@ int main(){
 	auto perso_id = scene.Add({perso, false});
 	scene.Add({camera, false}, perso_id);
 	scene.Update(true);
+	map.GenMapAroundPoint({perso->absolute_position.x,perso->absolute_position.y});
 
 	std::cout << "\nEnd of initialisation..." << std::endl;
     while(window.update()){
 		HelperMiscellaneous::PrintFps();
 		HelperInput::WASDMouvement(window, perso);
 		scene.Update();
+		map.GenMapAroundPoint({perso->absolute_position.x,perso->absolute_position.y});
 		glm::mat4 projection = glm::perspective(glm::radians<float>(window.fov), (float)window.width / (float)window.height, 0.1f, 10000.0f);
 		glm::mat4 view = glm::lookAt(camera->absolute_position, perso->absolute_position, {0.0f, 1.0f, 0.0f});
 

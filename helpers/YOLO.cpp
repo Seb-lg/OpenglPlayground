@@ -40,5 +40,6 @@ void YOLO::SetImage(const std::string& name, YOLO::Image &image) {
 		yolo._imgs[name] = image;
 	} else {
 		std::cerr << "Image already exist: " << name << std::endl;
+		yolo._imgs[name] = image;
 	}
 }
